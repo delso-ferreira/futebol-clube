@@ -14,6 +14,12 @@ const validListMock =
     },    
   ]
 
+  const validTeam = {
+    id: 5,
+    teamName: 'Cruzeiro'
+  }
+
   export default {
     validListMock,
+    validTeam,
   }

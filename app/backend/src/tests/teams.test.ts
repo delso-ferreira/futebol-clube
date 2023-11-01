@@ -2,11 +2,8 @@ import * as sinon from 'sinon';
 import * as chai from 'chai';
 // @ts-ignore
 import chaiHttp = require('chai-http');
-
 import { app } from '../app';
 import TeamsModel from '../database/models/TeamsModel'
-
-/* import { Response } from 'superagent'; */
 import teamsMocks from './mocks/teams.mocks';
 
 chai.use(chaiHttp);
@@ -27,7 +24,18 @@ describe('Teste da rota /teams', () => {
     expect(request.status).to.be.equal(200)
     expect(request.body).to.be.deep.equal(validList)
   })
-  
+
+  it ('Should return the correct team and status', async function () {
+    const validTeam = teamsMocks.validTeam;
+
+    const response = TeamsModel.build(validTeam);
+    sinon.stub(TeamsModel, 'findByPk').resolves(response)
+
+    const request = await chai.request(app).get('/teams/:id').send();
+
+    expect(request.status).to.be.equal(200)
+    expect(request.body).to.be.deep.equal(validTeam);    
+  })
 });
 
 
