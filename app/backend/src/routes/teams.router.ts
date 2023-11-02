@@ -7,4 +7,6 @@ const teamsController = new TeamsController();
 
 router.get('/', (req: Request, res: Response) => teamsController.findAllTeams(req, res));
 
+router.get('/:id', (req: Request, res: Response) => teamsController.findTeamByPk(req, res));
+
 export default router;
