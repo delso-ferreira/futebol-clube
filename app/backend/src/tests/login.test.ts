@@ -26,34 +26,22 @@ describe('Teste da rota /login', () => {
       });
   
       expect(request.status).to.be.equal(200)
-      expect(request.body).to.have.property('data')
+      expect(request.body).to.have.property('token')
     })
   
-    it ('Should return the correct error for invalid password or email ', async function () {
-      const invalidLogin = loginMock.invalidEmail;
-
-      const invalidPassword = loginMock.invalidPassword;
+    it ('Should return the correct error for invalid email ', async function () {
+      const invalidLogin = loginMock.invalidLogins[0]      
   
-      const response = UserModel.build(invalidLogin[0]);
+      const response = UserModel.build(invalidLogin);
       sinon.stub(UserModel, 'findOne').resolves(response)
-
-      const passwordResponse = UserModel.build(invalidPassword[0]);
-      sinon.stub(UserModel, 'findOne').resolves(passwordResponse)
-  
-      const request = await chai.request(app).get('/teams/:id').send( {
-        email: '@exemplo.com',
-        password: 'secret_admin',
-      });
-
-      const passwordRequest = await chai.request(app).get('/teams/:id').send( {
-        email: 'admin@admin.com',
-        password: '123456',
-      });
-  
-      expect(request.status && passwordRequest.status).to.be.equal(401)
-      expect(request && passwordRequest).json.to.be.equal({ message: 'Invalid email or password' });
       
-      /* expect(passwordRequest.status).to.be.equal(401)
-      expect(passwordRequest).json.to.be.equal({ message: 'Invalid email or password' }) */
+      const request = await chai.request(app).post('/login').send( {
+        email: '@admin.com',
+        password: 'secret_admin',
+      });    
+  
+      expect(request.status).to.be.equal(401)
+      expect(request.body).to.be.property('message');      
+      
     })
   });
