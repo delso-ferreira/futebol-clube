@@ -9,7 +9,6 @@ export default class LoginModel implements ILoginModel {
     const find = await this.model.findOne({
       where: { email },
     });
-     console.log(find?.dataValues, 'EU SOU O DATAVALUES')
     return find?.dataValues as unknown as IUsers;
   }
 }
