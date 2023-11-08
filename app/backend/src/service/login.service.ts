@@ -13,21 +13,32 @@ export default class LoginService {
   ) {}
 
   async loginAcess(email: string, password: string) : Promise<ServiceResponse<Itoken>> {
-    const login = await this.model.findByEmail(email);
-    console.log(email, 'EU SOU O LOGIN');
-    console.log(password, 'EU SOU O PASSWORD');
-    if (!login) {
+    const user = await this.model.findByEmail(email);
+    if (!user) {
       return { status: 'BAD_REQUEST', data: { message: 'Invalid email or password' } };
     }
 
-    if (!bcryptjs.compareSync(password, login.password)) {
+    if (!bcryptjs.compareSync(password, user.password)) {
       return { status: 'BAD_REQUEST', data: { message: 'Invalid email or password' } };
     }
 
     const token = this.tokenService.sign({
-      user: login?.id,
+      id: user.id,
     });
 
     return { status: 'SUCESS', data: { token } };
+  }
+
+  async findToken(role: string) : Promise<ServiceResponse<string>> {
+    const find = await this.model.findById(role);
+    if (!find) {
+      return { status: 'NOT_FOUND', data: { message: 'NOT FOUND' } };
+    }
+    const user = this.tokenService.sign({
+      role: find,
+    });
+    console.log(user, 'USER DA SERVICE');
+
+    return { status: 'SUCESS', data: user };
   }
 }

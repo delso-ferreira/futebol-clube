@@ -11,4 +11,11 @@ export default class LoginModel implements ILoginModel {
     });
     return find?.dataValues as unknown as IUsers;
   }
+
+  async findById(role: string) : Promise<IUsers | null> {
+    const find = await this.model.findOne({
+      where: { role },
+    });
+    return find as unknown as IUsers;
+  }
 }
