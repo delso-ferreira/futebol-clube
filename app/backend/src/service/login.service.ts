@@ -14,14 +14,14 @@ export default class LoginService {
 
   async loginAcess(email: string, password: string) : Promise<ServiceResponse<Itoken>> {
     const login = await this.model.findByEmail(email);
-    console.log(login);
-
+    console.log(email, 'EU SOU O LOGIN');
+    console.log(password, 'EU SOU O PASSWORD');
     if (!login) {
-      return { status: 'BAD_REQUEST', data: { message: 'All fields must be filled' } };
+      return { status: 'BAD_REQUEST', data: { message: 'Invalid email or password' } };
     }
 
-    if (!password || !bcryptjs.compare(password, login.password)) {
-      return { status: 'BAD_REQUEST', data: { message: 'All fields must be filled' } };
+    if (!bcryptjs.compareSync(password, login.password)) {
+      return { status: 'BAD_REQUEST', data: { message: 'Invalid email or password' } };
     }
 
     const token = this.tokenService.sign({

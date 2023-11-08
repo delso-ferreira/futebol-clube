@@ -11,12 +11,21 @@ export default class LoginValidation {
 
   static validNumber = 6;
 
-  static checkEmail(email: string) : boolean {
+  static checkEmail(email: string): boolean {
     const rgx = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
     return rgx.test(email);
   }
 
-  static validEmail(req: Request, res: Response, next: NextFunction) : void {
+  static loginExists(req: Request, res: Response, next: NextFunction): void {
+    const { email, password } = req.body as unknown as Login;
+    if (!email || !password) {
+      res.status(400).json({ message: 'All fields must be filled' });
+      return;
+    }
+    next();
+  }
+
+  static validEmail(req: Request, res: Response, next: NextFunction): void {
     const { email } = req.body as unknown as Login;
     if (!LoginValidation.checkEmail(email)) {
       res.status(401).json({ message: 'Invalid email or password' });
@@ -25,9 +34,9 @@ export default class LoginValidation {
     next();
   }
 
-  static validPassword(req: Request, res: Response, next: NextFunction) : void {
+  static validPassword(req: Request, res: Response, next: NextFunction): void {
     const { password } = req.body as unknown as Login;
-    if (password.length !== LoginValidation.validNumber) {
+    if (password.length < LoginValidation.validNumber) {
       res.status(401).json({ message: 'Invalid email or password' });
       return;
     }

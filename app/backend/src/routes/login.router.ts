@@ -8,8 +8,9 @@ const loginController = new LoginController();
 
 router.post(
   '/',
-  LoginValidation.validPassword,
+  LoginValidation.loginExists,
   LoginValidation.validEmail,
+  LoginValidation.validPassword,
   (req: Request, res: Response) => loginController.loginAcess(req, res),
 );
 
