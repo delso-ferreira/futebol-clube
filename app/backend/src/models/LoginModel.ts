@@ -12,9 +12,9 @@ export default class LoginModel implements ILoginModel {
     return find?.dataValues as unknown as IUsers;
   }
 
-  async findById(role: string) : Promise<IUsers | null> {
+  async findById(id: number) : Promise<IUsers | null> {
     const find = await this.model.findOne({
-      where: { role },
+      where: { id },
     });
     return find as unknown as IUsers;
   }

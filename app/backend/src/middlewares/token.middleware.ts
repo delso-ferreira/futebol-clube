@@ -12,28 +12,17 @@ export default class TokenValidation {
 
   static findToken(req: Request, res: Response, next: NextFunction) : void {
     const { authorization } = req.headers as unknown as AuthToken;
-    const token = TokenValidation.tokenExtractor(authorization);
-    const user = decode(token);
-
     if (!authorization) {
       res.status(401).json({ message: 'Token not found' });
       return;
     }
-    if (!user) {
-      res.status(401).json({ message: 'Token must be a valid token' });
-    }
-    req.body = user;
-    console.log(req.body, 'USER DO MIDDLEWARE');
-    next();
-  }
-
-  /* static validateToken(req: Request, res: Response, next: NextFunction) : void {
-    const { authorization } = req.headers as unknown as AuthToken;
     const token = TokenValidation.tokenExtractor(authorization);
+    console.log(token);
     const user = decode(token);
     if (!user) {
       res.status(401).json({ message: 'Token must be a valid token' });
-      return;
     }
-    next(); */
+    res.locals.user = user;
+    next();
+  }
 }

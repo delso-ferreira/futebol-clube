@@ -12,14 +12,16 @@ export default class LoginService {
     private tokenService : IJwt = new JsonWebTokenAdapter(),
   ) {}
 
+  static invalid = 'Invalid email or password';
+
   async loginAcess(email: string, password: string) : Promise<ServiceResponse<Itoken>> {
     const user = await this.model.findByEmail(email);
     if (!user) {
-      return { status: 'BAD_REQUEST', data: { message: 'Invalid email or password' } };
+      return { status: 'BAD_REQUEST', data: { message: LoginService.invalid } };
     }
 
     if (!bcryptjs.compareSync(password, user.password)) {
-      return { status: 'BAD_REQUEST', data: { message: 'Invalid email or password' } };
+      return { status: 'BAD_REQUEST', data: { message: LoginService.invalid } };
     }
 
     const token = this.tokenService.sign({
@@ -29,16 +31,11 @@ export default class LoginService {
     return { status: 'SUCESS', data: { token } };
   }
 
-  async findToken(role: string) : Promise<ServiceResponse<string>> {
-    const find = await this.model.findById(role);
+  async findToken(id: number) : Promise<ServiceResponse<string>> {
+    const find = await this.model.findById(id);
     if (!find) {
-      return { status: 'NOT_FOUND', data: { message: 'NOT FOUND' } };
+      return { status: 'BAD_REQUEST', data: { message: LoginService.invalid } };
     }
-    const user = this.tokenService.sign({
-      role: find,
-    });
-    console.log(user, 'USER DA SERVICE');
-
-    return { status: 'SUCESS', data: user };
+    return { status: 'SUCESS', data: find.role };
   }
 }
