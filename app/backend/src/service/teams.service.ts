@@ -16,7 +16,6 @@ export default class TeamSerVice {
 
   public async findTeamByPk(id : number) : Promise<ServiceResponse<ITeams | null>> {
     const findTeam = await this.modelTeams.findTeamByPk(id);
-    console.log(findTeam, 'SERVICE AQUI');
 
     return { status: 'SUCESS', data: findTeam };
   }
