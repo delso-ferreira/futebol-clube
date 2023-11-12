@@ -13,7 +13,6 @@ export default class TeamsController {
 
   public async findTeamByPk(req: Request, res: Response) {
     const id = Number(req.params.id);
-    console.log(id, 'CONTROLLER AQUI');
 
     const findTeam = await this.teamService.findTeamByPk(id);
     return res.status(200).json(findTeam.data);

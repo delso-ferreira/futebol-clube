@@ -44,4 +44,49 @@ describe('Teste da rota /login', () => {
       expect(request.body).to.be.property('message');      
       
     })
+    it ('Should return the correct error for invalid password ', async function () {
+      const invalidLogin = loginMock.invalidLogins[0]      
+  
+      const response = UserModel.build(invalidLogin);
+      sinon.stub(UserModel, 'findOne').resolves(response)
+      
+      const request = await chai.request(app).post('/login').send( {
+        email: 'admin@admin.com',
+        password: 'secret_admi',
+      });    
+  
+      expect(request.status).to.be.equal(401)
+      expect(request.body).to.be.property('message');      
+      
+    })
+    it ('Should return the correct error for missing email ', async function () {
+      const invalidLogin = loginMock.invalidLogins[0]      
+  
+      const response = UserModel.build(invalidLogin);
+      sinon.stub(UserModel, 'findOne').resolves(response)
+      
+      const request = await chai.request(app).post('/login').send( {
+        email: '',
+        password: 'secret_admin',
+      });    
+  
+      expect(request.status).to.be.equal(400)
+      expect(request.body).to.be.property('message');      
+      
+    })
+    it ('Should return the correct error for missing password ', async function () {
+      const invalidLogin = loginMock.invalidLogins[0]      
+  
+      const response = UserModel.build(invalidLogin);
+      sinon.stub(UserModel, 'findOne').resolves(response)
+      
+      const request = await chai.request(app).post('/login').send( {
+        email: '@admin.com',
+        password: '',
+      });    
+  
+      expect(request.status).to.be.equal(400)
+      expect(request.body).to.be.property('message');      
+      
+    })
   });

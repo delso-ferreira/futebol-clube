@@ -3,7 +3,7 @@ import Teams from '../database/models/TeamsModel';
 import MatchesModel from '../database/models/MatchesModel';
 import { IMatchesModel } from '../Interfaces/Matches/IMatchesModel';
 
-export default class LoginModel implements IMatchesModel {
+export default class MatchModel implements IMatchesModel {
   private model = MatchesModel;
 
   async findAllMatches(): Promise<IMatches[] | null> {

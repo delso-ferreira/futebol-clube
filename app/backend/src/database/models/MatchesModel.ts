@@ -8,7 +8,7 @@ import {
 import db from '.';
 import Teams from './TeamsModel';
 
-export default class Matches extends Model<InferAttributes<Matches>,
+class Matches extends Model<InferAttributes<Matches>,
 InferCreationAttributes<Matches>> {
   declare id: CreationOptional<number>;
   declare homeTeamId: number;
@@ -67,3 +67,5 @@ Matches.init(
 
 Matches.belongsTo(Teams, { foreignKey: 'home_team_id', as: 'homeTeam' });
 Matches.belongsTo(Teams, { foreignKey: 'away_team_id', as: 'awayTeam' });
+
+export default Matches;

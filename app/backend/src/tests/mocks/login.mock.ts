@@ -32,18 +32,16 @@ const validLogins = [
     },    
   ];
 
- /*  const invalidemail = 
-    {
-      email: '@exemplo.com',
-      password: 'secret_admin',
-    }
+  const validLoginAcessMock = {
+    id: 1,
+    email: 'admin@admin.com',
+    username: 'Admin',
+    role: 'admin',
+    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJsZXdpc2hhbWlsdG9uQGdtYWlsLmNvbSIsImlhdCI6MTY5NzUwNDA3NywiZXhwIjoxNjk5MjMyMDc3fQ.nOLPaNhB4DFtRh4rrmrPoEAdP4LrC8QzYNjDujCBY_Q'
 
-  const invalidPassword = {
-        email:'admin@admin.com',
-        password:'123456'
-    } */
-  
+  }  
   export default {
     validLogins,
     invalidLogins,
+    validLoginAcessMock,
 }

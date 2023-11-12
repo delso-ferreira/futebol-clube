@@ -9,12 +9,12 @@ export default class MatchesController {
 
   public async findAllMatches(req: Request, res: Response) {
     const { inProgress } = req.query;
-    const strgProgress = JSON.parse(inProgress as string);
-    if (!strgProgress) {
-      const { status, data } = await this.matchesService.findAllMatches();
+    if (inProgress) {
+      const strgProgress = JSON.parse(inProgress as string);
+      const { status, data } = await this.matchesService.findMatchesInProgress(strgProgress);
       return res.status(MapResponseStatus(status)).json(data);
     }
-    const { status, data } = await this.matchesService.findMatchesInProgress(strgProgress);
+    const { status, data } = await this.matchesService.findAllMatches();
     return res.status(MapResponseStatus(status)).json(data);
   }
 
