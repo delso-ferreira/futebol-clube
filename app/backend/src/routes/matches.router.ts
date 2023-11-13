@@ -14,7 +14,7 @@ router.get(
 router.patch(
   '/:id/finish',
   TokenValidation.findToken,
-  (req: Request, res: Response) => matchesController.findFinishedMatches(req, res),
+  (req: Request, res: Response) => matchesController.inProgressToFinished(req, res),
 );
 
 router.patch(

@@ -8,36 +8,49 @@ export default class MatchesController {
   ) {}
 
   public async findAllMatches(req: Request, res: Response) {
-    const { inProgress } = req.query;
-    if (inProgress) {
-      const strgProgress = JSON.parse(inProgress as string);
-      const { status, data } = await this.matchesService.findMatchesInProgress(strgProgress);
+    try {
+      const { inProgress } = req.query;
+      if (inProgress) {
+        const strgProgress = JSON.parse(inProgress as string);
+        const { status, data } = await this.matchesService.findMatchesInProgress(strgProgress);
+        return res.status(MapResponseStatus(status)).json(data);
+      }
+      const { status, data } = await this.matchesService.findAllMatches();
       return res.status(MapResponseStatus(status)).json(data);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: 'An error occurred while processing your request' });
     }
-    const { status, data } = await this.matchesService.findAllMatches();
-    return res.status(MapResponseStatus(status)).json(data);
   }
 
-  public async findFinishedMatches(req: Request, res: Response) {
-    const id = Number(req.params.id);
-    const { status, data } = await this.matchesService.findFinishedMatches(id);
-    if (status === 'SUCESS') {
-      return res.status(200).json({ message: 'Finished' });
+  public async inProgressToFinished(req: Request, res: Response) {
+    try {
+      const id = Number(req.params.id);
+      const { status } = await this.matchesService.inProgressToFinished(id);
+      if (status === 'SUCESS') {
+        return res.status(200).json({ message: 'Finished' });
+      }
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: 'Em andamento' });
     }
-    return res.status(500).json(data);
   }
 
   public async updateMatch(req: Request, res: Response) {
-    const id = Number(req.params.id);
-    const { homeTeamGoals, awayTeamGoals } = req.body;
-    const { status, data } = await this.matchesService.updateMatch(
-      id,
-      homeTeamGoals,
-      awayTeamGoals,
-    );
-    if (status === 'SUCESS') {
-      return res.status(200).json({ message: 'Match Updated' });
+    try {
+      const id = Number(req.params.id);
+      const { homeTeamGoals, awayTeamGoals } = req.body;
+      const { status } = await this.matchesService.updateMatch(
+        id,
+        homeTeamGoals,
+        awayTeamGoals,
+      );
+      if (status === 'SUCESS') {
+        return res.status(200).json({ message: 'Match Updated' });
+      }
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: 'Erro ao tentar atualizar partida' });
     }
-    return res.status(500).json(data);
   }
 }

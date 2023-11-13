@@ -20,8 +20,8 @@ export default class MatchesService {
     return { status: 'SUCESS', data: find };
   }
 
-  public async findFinishedMatches(id: number): Promise<ServiceResponse<object>> {
-    const find = await this.matchesModel.findFinishedMatches(id);
+  public async inProgressToFinished(id: number): Promise<ServiceResponse<object>> {
+    const find = await this.matchesModel.inProgressToFinished(id);
     return { status: 'SUCESS', data: { find } };
   }
 
