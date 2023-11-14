@@ -6,6 +6,7 @@ import { app } from '../app';
 /* import MatchModel from '../models/MatchesModel'; */
 import matchesMock from './mocks/matches.mock';
 import Matches from '../database/models/MatchesModel'
+import Teams from '../database/models/TeamsModel'
 import loginMock from './mocks/login.mock';
 
 
@@ -77,6 +78,36 @@ describe('Teste da rota /matches', () => {
   
       expect(status).to.be.equal(200);
       expect(body).to.be.deep.equal({ message: 'Match Updated' });    }) 
+      it('Should not create a match with two equal teams', async function() {
+        const team = Teams.build({ id: 1, teamName: "Barcelona" });
+    
+        sinon.stub(Teams, 'findByPk').resolves(team);
+    
+        const request = await chai.request(app).post('/matches').set('authorization', `Bearer ${ loginMock.validLoginAcessMock.token }`)
+        .send({
+          homeTeamId: 1,
+          awayTeamId: 1,
+          homeTeamGoals: 1,
+          awayTeamGoals: 2
+        });
+    
+        expect(request.status).to.be.equal(422);
+        expect(request.body).to.be.deep.equal({ message: "It is not possible to create a match with two equal teams" });
+      });    
+      it('Should not create a match with a non-existent team', async function() {
+        sinon.stub(Teams, 'findByPk').resolves(null);
+    
+        const request = await chai.request(app).post('/matches').set('authorization', `Bearer ${ loginMock.validLoginAcessMock.token }`)
+        .send({
+          homeTeamId: 1,
+          awayTeamId: 2,
+          homeTeamGoals: 1,
+          awayTeamGoals: 2
+        });
+    
+        expect(request.status).to.be.equal(404);
+        expect(request.body).to.be.deep.equal({ message: "There is no team with such id!" });
+      });
 
   });
   

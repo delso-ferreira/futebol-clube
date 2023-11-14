@@ -1,10 +1,12 @@
 import MatchesModel from '../models/MatchesModel';
 import IMatches from '../Interfaces/Matches/IMatches';
 import { ServiceResponse } from '../utils/ServiceResponse';
+import TeamModel from '../models/TeamModel';
 
 export default class MatchesService {
   constructor(
     private matchesModel: MatchesModel = new MatchesModel(),
+    private teamsModel: TeamModel = new TeamModel(),
   ) { }
 
   public async findAllMatches(): Promise<ServiceResponse<IMatches[]>> {
@@ -48,5 +50,44 @@ export default class MatchesService {
   ): Promise<ServiceResponse<object>> {
     const find = await this.matchesModel.updateMatch(id, homeTeamGoals, awayTeamGoals);
     return { status: 'SUCESS', data: { find } };
+  }
+
+  /* public async createMatch(
+    homeTeamId: number,
+    awayTeamId:number,
+    homeTeamGoals:number,
+    awayTeamGoals:number,
+  ) : Promise<ServiceResponse<IMatches>> {
+    const find = await this.matchesModel.createMatch(
+      homeTeamId,
+      awayTeamId,
+      homeTeamGoals,
+      awayTeamGoals,
+    );
+    if (!find) {
+      return { status: 'NOT_FOUND', data: { message: 'Cant create new match' } };
+    }
+    return { status: 'UPDATE', data: find };
+  } */
+
+  public async createMatch(
+    homeTeamId: number,
+    awayTeamId:number,
+    homeTeamGoals:number,
+    awayTeamGoals:number,
+  ) : Promise<ServiceResponse<IMatches>> {
+    if (homeTeamId === awayTeamId) {
+      return { status: 'UNAUTHORIZED',
+        data: { message: 'It is not possible to create a match with two equal teams' } };
+    } const homeTeam = await this.teamsModel.findTeamByPk(homeTeamId);
+    const awayTeam = await this.teamsModel.findTeamByPk(awayTeamId);
+    if (!homeTeam || !awayTeam) {
+      return { status: 'NOT_FOUND', data: { message: 'There is no team with such id!' } };
+    } const match = await this.matchesModel.createMatch(
+      homeTeamId,
+      awayTeamId,
+      homeTeamGoals,
+      awayTeamGoals,
+    ); return { status: 'UPDATE', data: match };
   }
 }

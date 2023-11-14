@@ -43,7 +43,7 @@ export default class MatchModel implements IMatchesModel {
     return find as unknown as IMatches[];
   }
 
-  async inProgressToFinished(id:number): Promise<IMatches | null> {
+  async inProgressToFinished(id: number): Promise<IMatches | null> {
     const find = await this.model.findByPk(id);
     if (find) {
       await this.model.update({ inProgress: false }, { where: { id } });
@@ -64,5 +64,23 @@ export default class MatchModel implements IMatchesModel {
       return find.dataValues;
     }
     return 401;
+  }
+
+  async createMatch(
+    homeTeamId: number,
+    awayTeamId:number,
+    homeTeamGoals:number,
+    awayTeamGoals:number,
+  ) {
+    const create = await this.model.create(
+      { homeTeamId,
+        awayTeamId,
+        homeTeamGoals,
+        awayTeamGoals,
+        inProgress: true,
+      },
+    );
+
+    return create;
   }
 }

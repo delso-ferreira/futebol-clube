@@ -59,4 +59,18 @@ export default class MatchesController {
       return res.status(500).json({ message: 'Erro ao tentar atualizar partida' });
     }
   }
+
+  public async createMatch(req: Request, res: Response) {
+    const { homeTeamId, awayTeamId, homeTeamGoals, awayTeamGoals } = req.body;
+    const { status, data } = await this.matchesService.createMatch(
+      homeTeamId,
+      awayTeamId,
+      homeTeamGoals,
+      awayTeamGoals,
+    );
+    if (status === 'UPDATE') {
+      return res.status(MapResponseStatus(status)).json(data);
+    }
+    return res.status(MapResponseStatus(status)).json(data);
+  }
 }
