@@ -43,14 +43,14 @@ export default class MatchModel implements IMatchesModel {
     return find as unknown as IMatches[];
   }
 
-  async inProgressToFinished(id:number): Promise<IMatches | number> {
+  async inProgressToFinished(id:number): Promise<IMatches | null> {
     const find = await this.model.findByPk(id);
     if (find) {
-      await find.update({ inProgress: false });
-      console.log(find.dataValues, 'FIND DATAVALUES');
+      await this.model.update({ inProgress: false }, { where: { id } });
+      console.log(find);
       return find.dataValues;
     }
-    return 401;
+    return null;
   }
 
   async updateMatch(

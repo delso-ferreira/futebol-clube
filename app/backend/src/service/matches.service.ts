@@ -20,9 +20,25 @@ export default class MatchesService {
     return { status: 'SUCESS', data: find };
   }
 
-  public async inProgressToFinished(id: number): Promise<ServiceResponse<object>> {
+  /*  public async inProgressToFinished(id: number): Promise<ServiceResponse<object>> {
     const find = await this.matchesModel.inProgressToFinished(id);
+    if (!find) {
+      return { status: 'NOT_FOUND', data: { message: 'No Matches Found' } };
+    }
     return { status: 'SUCESS', data: { find } };
+  }
+ */
+
+  public async inProgresstoFinished(id: string): Promise<ServiceResponse<unknown>> {
+    const find = await this.matchesModel.inProgressToFinished(Number(id));
+    if (!find) {
+      return { status: 'NOT_FOUND', data: { message: 'No Matches' } };
+    }
+    if (find.inProgress === false) {
+      return { status: 'BAD_REQUEST', data: { message: 'Match finished allready' } };
+    }
+    await this.matchesModel.inProgressToFinished(Number(id));
+    return { status: 'SUCESS', data: { message: 'Finished' } };
   }
 
   public async updateMatch(

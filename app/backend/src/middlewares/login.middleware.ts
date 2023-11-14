@@ -16,29 +16,26 @@ export default class LoginValidation {
     return rgx.test(email);
   }
 
-  static loginExists(req: Request, res: Response, next: NextFunction): void {
+  static loginExists(req: Request, res: Response, next: NextFunction): Response | void {
     const { email, password } = req.body as unknown as Login;
     if (!email || !password) {
-      res.status(400).json({ message: 'All fields must be filled' });
-      return;
+      return res.status(400).json({ message: 'All fields must be filled' });
     }
     next();
   }
 
-  static validEmail(req: Request, res: Response, next: NextFunction): void {
+  static validEmail(req: Request, res: Response, next: NextFunction): Response | void {
     const { email } = req.body as unknown as Login;
     if (!LoginValidation.checkEmail(email)) {
-      res.status(401).json({ message: 'Invalid email or password' });
-      return;
+      return res.status(401).json({ message: 'Invalid email or password' });
     }
     next();
   }
 
-  static validPassword(req: Request, res: Response, next: NextFunction): void {
+  static validPassword(req: Request, res: Response, next: NextFunction): Response | void {
     const { password } = req.body as unknown as Login;
     if (password.length < LoginValidation.validNumber) {
-      res.status(401).json({ message: 'Invalid email or password' });
-      return;
+      return res.status(401).json({ message: 'Invalid email or password' });
     }
     next();
   }

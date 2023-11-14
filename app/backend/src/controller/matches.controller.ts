@@ -23,7 +23,7 @@ export default class MatchesController {
     }
   }
 
-  public async inProgressToFinished(req: Request, res: Response) {
+  /* public async inProgressToFinished(req: Request, res: Response) {
     try {
       const id = Number(req.params.id);
       const { status } = await this.matchesService.inProgressToFinished(id);
@@ -34,6 +34,12 @@ export default class MatchesController {
       console.error(error);
       return res.status(500).json({ message: 'Em andamento' });
     }
+  } */
+
+  public async inProgressToFinished(req: Request, res: Response) {
+    const { id } = req.params;
+    const find = await this.matchesService.inProgresstoFinished(id);
+    return res.status(MapResponseStatus(find.status)).json(find.data);
   }
 
   public async updateMatch(req: Request, res: Response) {
