@@ -83,4 +83,25 @@ export default class MatchModel implements IMatchesModel {
 
     return create;
   }
+
+  /* public async findFinishedMatches() : Promise<IMatches[]> {
+    const find = await this.model.findAll({
+      where: {
+        inProgress: false,
+      },
+      include: [
+        {
+          model: Teams,
+          as: 'homeTeam',
+          attributes: ['teamName'],
+        },
+        {
+          model: Teams,
+          as: 'awayTeam',
+          attributes: ['teamName'],
+        },
+      ],
+    });
+    return find;
+  } */
 }

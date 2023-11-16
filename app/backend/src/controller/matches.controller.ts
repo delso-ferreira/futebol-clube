@@ -73,4 +73,14 @@ export default class MatchesController {
     }
     return res.status(MapResponseStatus(status)).json(data);
   }
+
+  /* public async getHomeTeamsStats(_req: Request, res: Response) {
+    try {
+      const { status, data } = await this.matchesService.getHomeTeamsStats();
+      return res.status(MapResponseStatus(status)).json(data);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: 'An error occurred while processing your request' });
+    }
+  } */
 }
