@@ -15,8 +15,7 @@ export default class TokenValidation {
     if (!authorization) {
       return res.status(401).json({ message: 'Token not found' });
     }
-    const token = TokenValidation.tokenExtractor(authorization);
-    console.log(token);
+    const token = TokenValidation.tokenExtractor(authorization);    
     const user = decode(token);
     if (!user) {
       return res.status(401).json({ message: 'Token must be a valid token' });

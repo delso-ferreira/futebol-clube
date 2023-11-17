@@ -1,9 +1,9 @@
+// @ts-ignore
 import * as sinon from 'sinon';
 import * as chai from 'chai';
 // @ts-ignore
 import chaiHttp = require('chai-http');
 import { app } from '../app';
-/* import MatchModel from '../models/MatchesModel'; */
 import matchesMock from './mocks/matches.mock';
 import Matches from '../database/models/MatchesModel'
 import Teams from '../database/models/TeamsModel'
