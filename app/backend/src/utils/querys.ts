@@ -1,7 +1,7 @@
 const homeLeaderboards = ` SELECT name, totalPoints, totalGames,
 totalVictories, totalLosses, totalDraws,
 goalsFavor, goalsOwn, (goalsFavor-goalsOwn) as goalsBalance,
-((totalPoints/(totalGames * 3))*100) AS efficiency
+ROUND(((totalPoints/(totalGames * 3))*100), 2 ) AS efficiency
  FROM
 ( SELECT teams.team_name as name,
 COUNT(*) AS totalGames,
